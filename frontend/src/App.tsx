@@ -14,7 +14,7 @@ function App() {
 
   return (
     <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
-      <VStack  p={8} borderRadius="lg" boxShadow="md" bg="white">
+      <VStack spacing={4} p={8} borderRadius="lg" boxShadow="md" bg="white">
         <Heading size="lg">Study Planner v1</Heading>
         <Text fontSize="md">Backend status: {apiStatus}</Text>
         <Button colorScheme="teal">This will become Login later</Button>
