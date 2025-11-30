@@ -1,25 +1,47 @@
-import { useEffect, useState } from "react";
-import { Box, Heading, Text, Button, VStack } from "@chakra-ui/react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import DashboardPage from "./pages/DashboardPage";
+import type { ReactNode } from "react";
+
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>; // you can replace with a Chakra spinner later
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
 
 function App() {
-  const [apiStatus, setApiStatus] = useState<string>("Loading...");
-
-  useEffect(() => {
-    // Adjust URL if needed (we'll set env soon)
-    fetch(import.meta.env.VITE_API_URL + "/api/health")
-      .then((res) => res.json())
-      .then((data) => setApiStatus(data.message))
-      .catch(() => setApiStatus("Failed to reach backend"));
-  }, []);
+  const { user } = useAuth();
 
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
-      <VStack spacing={4} p={8} borderRadius="lg" boxShadow="md" bg="white">
-        <Heading size="lg">Study Planner v1</Heading>
-        <Text fontSize="md">Backend status: {apiStatus}</Text>
-        <Button colorScheme="teal">This will become Login later</Button>
-      </VStack>
-    </Box>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* later: add /settings, /routines, etc. */}
+    </Routes>
   );
 }
 
