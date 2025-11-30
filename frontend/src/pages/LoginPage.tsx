@@ -1,13 +1,6 @@
-import {  useState } from "react";
+import { useState } from "react";
 import type { FormEvent } from "react";
-import {
-  Box,
-  Button,
-  Input,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Input, Heading, Text, VStack } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { useToast } from "@chakra-ui/toast";
 import { useAuth } from "../context/AuthContext";
@@ -56,14 +49,7 @@ const LoginPage = () => {
       bg="gray.50"
       px={4}
     >
-      <Box
-        maxW="md"
-        w="100%"
-        p={8}
-        bg="white"
-        boxShadow="lg"
-        borderRadius="lg"
-      >
+      <Box maxW="md" w="100%" p={8} bg="white" boxShadow="lg" borderRadius="lg">
         <VStack gap={6} align="stretch">
           <Heading size="lg" textAlign="center">
             Study Planner Login
@@ -71,8 +57,9 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit}>
             <VStack gap={4} align="stretch">
               <FormControl id="email" isRequired>
-                <FormLabel>Email</FormLabel>
+                <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -80,8 +67,9 @@ const LoginPage = () => {
                 />
               </FormControl>
               <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel htmlFor="password">Password</FormLabel>
                 <Input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -94,7 +82,6 @@ const LoginPage = () => {
                 w="full"
                 loading={submitting}
                 loadingText="Creating account..."
-
               >
                 Login
               </Button>
@@ -102,8 +89,8 @@ const LoginPage = () => {
           </form>
           <Text fontSize="sm" textAlign="center">
             Don&apos;t have an account?{" "}
-           <RouterLink to="/signup" style={{ color: "#319795" }}>
-                Sign Up
+            <RouterLink to="/signup" style={{ color: "#319795" }}>
+              Sign Up
             </RouterLink>
           </Text>
         </VStack>

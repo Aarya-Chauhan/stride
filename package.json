@@ -1,0 +1,24 @@
+{
+  "name": "stride",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aarya-Chauhan/stride.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aarya-Chauhan/stride/issues"
+  },
+  "homepage": "https://github.com/Aarya-Chauhan/stride#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}

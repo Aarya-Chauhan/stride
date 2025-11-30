@@ -61,54 +61,64 @@ const SignupPage = () => {
           <form onSubmit={handleSubmit}>
             <VStack gap={4} align="stretch">
               <FormControl id="name" isRequired>
-                <FormLabel>Name</FormLabel>
+                <FormLabel htmlFor="name">Name</FormLabel>
                 <Input
+                  id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
                 />
               </FormControl>
+
               <FormControl id="email" isRequired>
-                <FormLabel>Email</FormLabel>
+                <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                 />
               </FormControl>
+
               <FormControl id="profession">
-                <FormLabel>Profession</FormLabel>
+                <FormLabel htmlFor="profession">Profession</FormLabel>
                 <Input
+                  id="profession"
                   value={profession}
                   onChange={(e) => setProfession(e.target.value)}
                   placeholder="Student, Developer, etc."
                 />
               </FormControl>
+
               <FormControl id="timezone">
-                <FormLabel>Timezone</FormLabel>
+                <FormLabel htmlFor="timezone">Timezone</FormLabel>
                 <select
+                  id="timezone"
                   value={timezone}
                   onChange={(e) => setTimezone(e.target.value)}
                   style={{
                     padding: "8px",
                     borderRadius: "4px",
                     border: "1px solid #CBD5E0",
-                  }} // optional styling
+                  }}
                 >
                   <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
                   {/* later: add more timezones */}
                 </select>
               </FormControl>
+
               <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel htmlFor="password">Password</FormLabel>
                 <Input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                 />
               </FormControl>
+
               <Button
                 type="submit"
                 colorScheme="teal"
