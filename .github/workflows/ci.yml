@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # MongoDB service for backend tests
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # Backend will use this to connect to Mongo
+      MONGO_URI: mongodb://localhost:27017/stride-test
+      # JWT secret from GitHub Secrets
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # Install root deps (Playwright, etc.)
+      - name: Install root dependencies
+        run: npm ci
+        working-directory: .
+
+      # Install backend deps
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: backend
+
+      # Install frontend deps
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+
+      # Install Playwright browsers
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+        working-directory: .
+
+      # Run Playwright E2E tests (this will start backend+frontend via webServer config)
+      - name: Run Playwright tests
+        run: npx playwright test
+        working-directory: .
