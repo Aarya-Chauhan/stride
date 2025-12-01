@@ -17,6 +17,7 @@ export default function LandingPage() {
       gap={5}
       px={{ base: 4, md: 10 }}
       py={5}
+      data-testid="landing-page"
     >
       {/* Top nav */}
       <Flex as="header" h="64px" align="center" justify="space-between">
@@ -53,7 +54,9 @@ export default function LandingPage() {
               }}
             />
           </Box>
-          <Heading size="md">Stride</Heading>
+          <Heading size="md" data-testid="landing-logo">
+            Stride
+          </Heading>
         </Flex>
 
         {/* Fake nav links */}
@@ -72,13 +75,19 @@ export default function LandingPage() {
 
         {/* Auth buttons */}
         <Flex align="center" gap={3}>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/login")}
+            data-testid="landing-signin-btn"
+          >
             Sign in
           </Button>
           <Button
             size="sm"
             colorScheme="teal"
             onClick={() => navigate("/signup")}
+            data-testid="landing-header-get-started-btn"
           >
             Get started
           </Button>
@@ -110,6 +119,7 @@ export default function LandingPage() {
           mb={{ base: 10, md: 10 }}
           px={{ base: 4, md: 200 }}
           py={{ base: 4, md: 75 }}
+          data-testid="landing-hero"
         >
           <Badge
             colorScheme="teal"
@@ -126,6 +136,7 @@ export default function LandingPage() {
               fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
               lineHeight="1.1"
               mb={2}
+              data-testid="landing-hero-heading-main"
             >
               Think, plan, and track
             </Heading>
@@ -135,6 +146,7 @@ export default function LandingPage() {
               fontWeight="semibold"
               color="gray.500"
               mb={4}
+              data-testid="landing-hero-heading-sub"
             >
               all in one place
             </Heading>
@@ -154,6 +166,7 @@ export default function LandingPage() {
             size="lg"
             px={10}
             onClick={() => navigate("/signup")}
+            data-testid="landing-hero-get-started-btn"
           >
             Get Started
           </Button>

@@ -1,48 +1,107 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 
-test("signup, logout, and login to dashboard", async ({ page }) => {
+/**
+ * Helper: sign up a new user via the UI and land on /dashboard.
+ * Returns the credentials so we can log in again later.
+ */
+async function signupAndGoToDashboard(page: Page) {
   const uniqueSuffix = Date.now();
-  const name = "Playwright User";
+  const name = `Playwright User ${uniqueSuffix}`;
   const email = `playwright_user_${uniqueSuffix}@example.com`;
   const password = "Secret123!";
-  const profession = "Student";
 
-  // 1. Go to signup page
   await page.goto("/signup");
 
-  // 2. Fill signup form
-  await page.getByLabel("Name").fill(name);
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Profession").fill(profession);
-  await page.getByLabel("Timezone").selectOption("Asia/Kolkata");
-  await page.getByLabel("Password").fill(password);
+  await page.getByTestId("signup-name-input").fill(name);
+  await page.getByTestId("signup-email-input").fill(email);
+  await page.getByTestId("signup-password-input").fill(password);
 
-  // 3. Submit signup form
-  await page.getByRole("button", { name: "Sign up" }).click();
+  // profession/timezone are optional
+  await page.getByTestId("signup-submit-btn").click();
 
-  // 4. Expect to be on dashboard
-  await expect(
-    page.getByRole("heading", { name: /welcome/i })
-  ).toBeVisible();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByTestId("dashboard-welcome-heading")).toBeVisible();
 
-  await expect(page.getByText(email)).toBeVisible();
+  return { name, email, password };
+}
 
-  // 5. Logout
-  await page.getByRole("button", { name: "Logout" }).click();
+test.describe("Stride Auth & Routing E2E (stable testids)", () => {
+  test("Landing page renders and navigates to Signup via Get Started", async ({
+    page,
+  }) => {
+    await page.goto("/");
 
-  // 6. Expect to be on login page
-  await expect(
-    page.getByRole("heading", { name: /study planner login/i })
-  ).toBeVisible();
+    await expect(page.getByTestId("landing-page")).toBeVisible();
+    await expect(page.getByTestId("landing-hero-heading-main")).toBeVisible();
 
-  // 7. Login with same credentials
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Password").fill(password);
-  await page.getByRole("button", { name: "Login" }).click();
+    // Click hero CTA → /signup
+    const getStartedButton = page.getByTestId(
+      "landing-hero-get-started-btn"
+    );
+    await expect(getStartedButton).toBeVisible();
+    await getStartedButton.click();
 
-  // 8. Expect to be back on dashboard
-  await expect(
-    page.getByRole("heading", { name: /welcome/i })
-  ).toBeVisible();
-  await expect(page.getByText(email)).toBeVisible();
+    await expect(page).toHaveURL(/\/signup$/);
+    await expect(page.getByTestId("signup-page")).toBeVisible();
+  });
+
+  test("Signup flow → lands on Dashboard and shows welcome", async ({ page }) => {
+    await signupAndGoToDashboard(page);
+  });
+
+  test("Unauthenticated user visiting /dashboard is redirected to /", async ({
+    page,
+  }) => {
+    await page.goto("/dashboard");
+
+    // ProtectedRoute sends them to "/"
+    await expect(page).toHaveURL("/");
+    await expect(page.getByTestId("landing-page")).toBeVisible();
+  });
+
+  test("Logout returns to Landing Page and protects /dashboard", async ({
+    page,
+  }) => {
+    await signupAndGoToDashboard(page);
+
+    await page.getByTestId("dashboard-logout-btn").click();
+
+    await expect(page).toHaveURL("/");
+    await expect(page.getByTestId("landing-page")).toBeVisible();
+
+    await page.goto("/dashboard");
+    await expect(page).toHaveURL("/");
+  });
+
+  test("Existing user can log in and reach Dashboard", async ({ page }) => {
+    const { email, password } = await signupAndGoToDashboard(page);
+
+    // Logout
+    await page.getByTestId("dashboard-logout-btn").click();
+    await expect(page).toHaveURL("/");
+
+    // Go to login page from landing
+    await page.getByTestId("landing-signin-btn").click();
+    await expect(page).toHaveURL(/\/login$/);
+
+    // Fill login form (make sure your LoginPage has these testids)
+    await page.getByTestId("login-email-input").fill(email);
+    await page.getByTestId("login-password-input").fill(password);
+    await page.getByTestId("login-submit-btn").click();
+
+    // Back on dashboard
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await expect(page.getByTestId("dashboard-welcome-heading")).toBeVisible();
+  });
+
+  test("Logged-in user visiting / is redirected to /dashboard", async ({
+    page,
+  }) => {
+    await signupAndGoToDashboard(page);
+
+    await page.goto("/");
+
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await expect(page.getByTestId("dashboard-page")).toBeVisible();
+  });
 });

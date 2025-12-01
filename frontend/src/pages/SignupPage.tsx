@@ -52,13 +52,22 @@ const SignupPage = () => {
       justifyContent="center"
       bg="gray.50"
       px={4}
+      data-testid="signup-page"
     >
-      <Box maxW="md" w="100%" p={8} bg="white" boxShadow="lg" borderRadius="lg">
+      <Box
+        maxW="md"
+        w="100%"
+        p={8}
+        bg="white"
+        boxShadow="lg"
+        borderRadius="lg"
+        data-testid="signup-card"
+      >
         <VStack gap={6} align="stretch">
-          <Heading size="lg" textAlign="center">
+          <Heading size="lg" textAlign="center" data-testid="signup-heading">
             Create your Study Planner account
           </Heading>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} data-testid="signup-form">
             <VStack gap={4} align="stretch">
               <FormControl id="name" isRequired>
                 <FormLabel htmlFor="name">Name</FormLabel>
@@ -67,6 +76,7 @@ const SignupPage = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
+                  data-testid="signup-name-input"
                 />
               </FormControl>
 
@@ -78,6 +88,7 @@ const SignupPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
+                  data-testid="signup-email-input"
                 />
               </FormControl>
 
@@ -88,6 +99,7 @@ const SignupPage = () => {
                   value={profession}
                   onChange={(e) => setProfession(e.target.value)}
                   placeholder="Student, Developer, etc."
+                  data-testid="signup-profession-input"
                 />
               </FormControl>
 
@@ -102,6 +114,7 @@ const SignupPage = () => {
                     borderRadius: "4px",
                     border: "1px solid #CBD5E0",
                   }}
+                  data-testid="signup-timezone-select"
                 >
                   <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
                   {/* later: add more timezones */}
@@ -116,6 +129,7 @@ const SignupPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  data-testid="signup-password-input"
                 />
               </FormControl>
 
@@ -125,6 +139,7 @@ const SignupPage = () => {
                 w="full"
                 loading={submitting}
                 loadingText="Creating account..."
+                data-testid="signup-submit-btn"
               >
                 Sign up
               </Button>
@@ -132,7 +147,11 @@ const SignupPage = () => {
           </form>
           <Text fontSize="sm" textAlign="center">
             Already have an account?{" "}
-            <RouterLink to="/login" style={{ color: "#319795" }}>
+            <RouterLink
+              to="/login"
+              style={{ color: "#319795" }}
+              data-testid="signup-login-link"
+            >
               Log In
             </RouterLink>
           </Text>
