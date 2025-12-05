@@ -1,9 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
 
-/**
- * Helper: sign up a new user via the UI and land on /dashboard.
- * Returns the credentials so we can log in again later.
- */
 async function signupAndGoToDashboard(page: Page) {
   const uniqueSuffix = Date.now();
   const name = `Playwright User ${uniqueSuffix}`;
